@@ -28,17 +28,12 @@ This project allows users to upload GeoTIFF raster files through a web interface
 ├── init_tiff_metadata.sql
 ├── README.md
 ```
-
-![1.png](../../1.png)
-
-
-![2.png](../../2.png)
-
-
-![DB1.png](../../DB1.png)
+![1](https://github.com/user-attachments/assets/d625bfd5-a8d8-4daa-b6ce-f78b10feb50c)
+![2](https://github.com/user-attachments/assets/f9d45076-3e82-4e17-b5e0-53ee126e7601)
+![DB1](https://github.com/user-attachments/assets/092aaf1d-d38a-4adf-88d0-69731f08f9af)
+![db2](https://github.com/user-attachments/assets/2610ceff-02c7-464e-af18-305c37dca6d8)
 
 
-![db2.png](../../db2.png)
 
 
 ## 🛠️ Installation
