@@ -18,7 +18,7 @@ class UploadTIFF(Resource):
     def post():
         try:
             file = request.files.get('tiff_file')
-        except:
+        except FileNotFoundError :
             return {"error": "Can't get the tiff file"}, 400
 
         filename = file.filename
@@ -34,9 +34,9 @@ class UploadTIFF(Resource):
 
         geom_str, _ = get_geom_wkt_and_bounds(dataset)
         epsg_code = get_epsg_from_dataset(dataset)
-        upload_time = datetime.utcnow()
+        upload_time = datetime.now()
 
-        save_metadata(filename, upload_time, epsg_code, value, geom_str, dataset)
+        save_metadata(filename, upload_time, epsg_code, value, geom_str)
 
         #Reproject to EPSG:4326 and store permanently
         reprojected_path = f'temp/reprojected_{filename}'
@@ -64,7 +64,8 @@ api.add_resource(UploadTIFF, '/upload')
 
 
 class CropImage(Resource):
-    def post(self):
+    @staticmethod
+    def post():
         data = request.get_json()
         filename = data.get('filename')
         minx = float(data['minx'])
