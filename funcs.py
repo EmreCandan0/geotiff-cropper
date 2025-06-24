@@ -1,6 +1,8 @@
+import shutil
+
 from db import db_connection
 from osgeo import osr
-
+import os
 def get_epsg_from_dataset(dataset):
     """
        Extract the EPSG code from a GDAL dataset.
@@ -61,7 +63,7 @@ def get_geom_wkt_and_bounds(dataset):
     :param dataset: The GDAL dataset object to extract bounding info from.
     :type dataset: gdal.Dataset
     :return: A tuple containing the WKT polygon and 4326 converted bounding box coordinates (minx, miny, maxx, maxy).
-    :rtype: tuple[str, tuple[float, float, float, float]]
+    :rtype: str
     """
     gt = dataset.GetGeoTransform()
     minx = gt[0]
@@ -70,4 +72,18 @@ def get_geom_wkt_and_bounds(dataset):
     miny = maxy + (dataset.RasterYSize * gt[5])
 
     polygon_wkt = f"POLYGON(({minx} {miny}, {minx} {maxy}, {maxx} {maxy}, {maxx} {miny}, {minx} {miny}))"
-    return polygon_wkt, (minx, miny, maxx, maxy)
+    return polygon_wkt
+
+
+def clear_temp_dirs():
+    print("Cleaning up temp and upload directories...")
+    for folder in ['uploads', 'temp']:
+        for filename in os.listdir(folder):
+            path = os.path.join(folder, filename)
+            try:
+                if os.path.isfile(path) or os.path.islink(path):
+                    os.unlink(path)
+                elif os.path.isdir(path):
+                    shutil.rmtree(path)
+            except Exception as e:
+                print(f"Failed to delete {path}: {e}")
