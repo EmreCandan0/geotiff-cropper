@@ -1,6 +1,7 @@
+import atexit
 from flask import Flask, render_template, request
 from flask_restful import Resource, Api
-from funcs import get_geom_wkt_and_bounds, save_metadata, get_epsg_from_dataset
+from funcs import get_geom_wkt_and_bounds, save_metadata, get_epsg_from_dataset,clear_temp_dirs
 from osgeo import gdal
 import os
 from datetime import datetime
@@ -32,7 +33,7 @@ class UploadTIFF(Resource):
 
         print(metadata)
 
-        geom_str, _ = get_geom_wkt_and_bounds(dataset)
+        geom_str= get_geom_wkt_and_bounds(dataset)
         epsg_code = get_epsg_from_dataset(dataset)
         upload_time = datetime.now()
 
@@ -91,6 +92,8 @@ class CropImage(Resource):
         return {"image_url": output_path}
 
 api.add_resource(CropImage, "/crop")
+
+atexit.register(clear_temp_dirs)
 
 if __name__ == '__main__':
     os.makedirs("uploads", exist_ok=True)
